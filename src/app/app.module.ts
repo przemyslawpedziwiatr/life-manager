@@ -5,14 +5,24 @@ import { AppComponent } from './app.component';
 import { AngularFireModule } from '@angular/fire';
 import { environment } from 'src/environments/environment.prod';
 import { AngularFireAuthModule } from '@angular/fire/auth';
-import { LoginComponent } from './components/login/login.component';
-import { FormsModule } from '@angular/forms';
+import { AuthLoginComponent } from './components/auth-login/auth-login.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { RouterModule } from '@angular/router';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { AuthRegisterComponent } from './components/auth-register/auth-register.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { DashboardToolbarComponent } from './components/dashboard-toolbar/dashboard-toolbar.component';
+import { DashboardSidebarComponent } from './components/dashboard-sidebar/dashboard-sidebar.component';
+import { MaterialModule } from './modules/material.module';
+import { StoreModule } from '@ngrx/store';
+import { reducers, metaReducers } from './reducers';
 
 const ROUTES = [
-  { path: '', redirectTo: '/login', pathMatch: 'full'},
-  { path: 'login', component: LoginComponent },
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: 'login', component: AuthLoginComponent },
+  { path: 'dashboard', component: DashboardComponent }
   // {
   //   path: 'dashboard',
   //   component: DashboardComponent,
@@ -20,17 +30,27 @@ const ROUTES = [
   // },
 ];
 
-
 @NgModule({
-  declarations: [AppComponent, LoginComponent],
+  declarations: [
+    AppComponent,
+    AuthLoginComponent,
+    AuthRegisterComponent,
+    DashboardComponent,
+    DashboardToolbarComponent,
+    DashboardSidebarComponent
+  ],
   imports: [
+    MaterialModule,
     BrowserModule,
     FormsModule,
     AppRoutingModule,
     RouterModule.forRoot(ROUTES),
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule,
-    AngularFireAuthModule
+    AngularFireAuthModule,
+    ReactiveFormsModule,
+    BrowserAnimationsModule,
+    StoreModule.forRoot(reducers, { metaReducers }),
   ],
   providers: [],
   bootstrap: [AppComponent]
