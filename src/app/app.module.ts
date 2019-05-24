@@ -16,8 +16,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { DashboardToolbarComponent } from './components/dashboard-toolbar/dashboard-toolbar.component';
 import { DashboardSidebarComponent } from './components/dashboard-sidebar/dashboard-sidebar.component';
 import { MaterialModule } from './modules/material.module';
-import { StoreModule } from '@ngrx/store';
-import { reducers, metaReducers } from './reducers';
+import { NgxsModule } from '@ngxs/store';
 
 const ROUTES = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -50,7 +49,7 @@ const ROUTES = [
     AngularFireAuthModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    StoreModule.forRoot(reducers, { metaReducers }),
+    NgxsModule.forRoot([])
   ],
   providers: [],
   bootstrap: [AppComponent]

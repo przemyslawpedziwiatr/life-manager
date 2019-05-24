@@ -5,7 +5,12 @@
 export const environment = {
   production: false,
   firebaseConfig: {
-    
+    apiKey: "AIzaSyATbsQIe8o2ZaRuDpKe66xIeuO0qacEZlk",
+    authDomain: "house-manager-2c4fc.firebaseapp.com",
+    databaseURL: "https://house-manager-2c4fc.firebaseio.com",
+    projectId: "house-manager-2c4fc",
+    storageBucket: "house-manager-2c4fc.appspot.com",
+    messagingSenderId: "576564112676"
   }
 };
 
@@ -18,3 +23,4 @@ export const environment = {
  * on performance if an error is thrown.
  */
 // import 'zone.js/dist/zone-error';  // Included with Angular CLI.
+

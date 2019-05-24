@@ -1,0 +1,54 @@
+<mat-card class="login">
+  <mat-card-header>
+    <mat-card-title>Zaloguj się</mat-card-title>
+    <mat-card-subtitle>Użyj maila i hasła</mat-card-subtitle>
+  </mat-card-header>
+
+  <form>
+    <mat-card-content>
+      <mat-form-field class="full-width">
+        <input
+          matInput
+          type="email"
+          [formControl]="loginForm.email"
+          placeholder="E-Mail"
+        />
+        <mat-error *ngIf="loginForm.email.invalid"
+          >Niewłaściwy e-mail</mat-error
+        >
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <input
+          matInput
+          type="password"
+          name="password"
+          required
+          [formControl]="loginForm.password"
+          placeholder="Hasło"
+        />
+      </mat-form-field>
+
+      <section class="login__actions">
+        <button
+          (click)="login()"
+          class="f-right"
+          mat-raised-button
+          color="primary"
+          [disabled]="isLogging"
+        >
+          Zaloguj się
+        </button>
+        <p *ngIf="serverMessage !== ''">
+          <mat-error 
+            >{{ serverMessage }}
+          </mat-error>
+        </p>
+      </section>
+      <!-- <button (click)="register()" mat-raised-button color="primary">Zarejestruj się</button> -->
+    </mat-card-content>
+  </form>
+</mat-card>
+
+<!-- 
+<h3>{{ registerInfo }}</h3>
+<p>{{ credentials | json }}</p> -->
