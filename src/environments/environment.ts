@@ -1,18 +1,13 @@
+import { firebaseApi } from './firebase';
+
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
+  appName: 'Life Planner',
   production: false,
-  firebaseConfig: {
-    apiKey: "AIzaSyATbsQIe8o2ZaRuDpKe66xIeuO0qacEZlk",
-    authDomain: "house-manager-2c4fc.firebaseapp.com",
-    databaseURL: "https://house-manager-2c4fc.firebaseio.com",
-    projectId: "house-manager-2c4fc",
-    storageBucket: "house-manager-2c4fc.appspot.com",
-    messagingSenderId: "576564112676"
-  }
-};
+  firebaseConfig: { ... firebaseApi }
 
 
 /*
