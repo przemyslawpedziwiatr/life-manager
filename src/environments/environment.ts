@@ -8,6 +8,7 @@ export const environment = {
   appName: 'Life Planner',
   production: false,
   firebaseConfig: { ... firebaseApi }
+}
 
 
 /*
