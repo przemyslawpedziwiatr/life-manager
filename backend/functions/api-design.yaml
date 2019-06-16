@@ -1,0 +1,336 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server Petstore server."
+  version: "1.0.0"
+  title: "Swagger Petstore"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "apiteam@swagger.io"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "petstore.swagger.io"
+basePath: "/v1"
+tags:
+- name: "resources"
+  description: "Operations about resources"
+schemes:
+- "https"
+- "http"
+paths:
+  /resources:
+    get:
+      tags:
+      - "resources"
+      summary: "Gets all resources"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Resource"
+    post:
+      tags:
+      - "resources"
+      summary: "Adds a resource"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: '#/definitions/Resource'
+      responses:
+        405:
+          description: "Invalid input"
+  /resources/{id}:
+    delete:
+      tags:
+      - "resources"
+      summary: "Deletes a resource"
+      description: ""
+      operationId: "deleteResource"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "token_id"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "id"
+        in: "path"
+        description: "Resource id to delete"
+        required: true
+        type: "string"
+      responses:
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "Resource not found"
+    put:
+      tags:
+        - "resources"
+      summary: "Updates a resource."
+      operationId: "updateResource"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "token_id"
+          in: "header"
+          required: true
+          type: "string"
+        - name: "id"
+          in: "query"
+          description: "Resource id to update quantity"
+          required: true
+          type: "string"
+        - name: "resource"
+          in: "body"
+          required: true
+          description: "Resource data to update"
+          schema:
+            $ref: '#/definitions/Resource'
+      responses:
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "Resource not found"
+  /resources/{id}/quantity:
+    put:
+      tags:
+      - "resources"
+      summary: "Updates quantity of a resource."
+      operationId: "updateQuantity"
+      produces:
+      - "application/json"
+      parameters:
+        - name: "token_id"
+          in: "header"
+          required: true
+          type: "string"
+        - name: "id"
+          in: "query"
+          description: "Resource id to update quantity"
+          required: true
+          type: "string"
+      responses:
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "Resource not found"
+  /resources/{id}/picture:
+    put:
+      tags:
+        - "resources"
+      summary: "Updates picture of a resource."
+      operationId: "updatePicture"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "token_id"
+          in: "header"
+          required: true
+          type: "string"
+        - name: "id"
+          in: "path"
+          description: "Resource id to update quantity"
+          required: true
+          type: "string"
+        - name: "picture"
+          required: true
+          in: "formData"
+          description: "Image file"
+          type: "string"
+      responses:
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "Resource not found"
+  /resources/{id}/providers:
+    put:
+      tags:
+        - "resources"
+      consumes:
+        - "application/json"
+      summary: "Updates all providers of a resource."
+      operationId: "changeProviders"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "token_id"
+          in: "header"
+          required: true
+          type: "string"
+        - name: "id"
+          in: "path"
+          description: "Resource id to update quantity"
+          required: true
+          type: "string"
+        - name: "providers"
+          required: true
+          in: "body"
+          description: "Array of all the providers file"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/ProviderSource'
+      responses:
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "Resource not found"
+  /resources/providers:
+    post:
+      tags:
+      - "resources"
+      summary: "Adds a resource provider"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            $ref: '#/definitions/ProductProviders'
+      responses:
+        405:
+          description: "Invalid input"
+    get:
+      tags:
+        - "resources"
+      summary: "Gets all resource providers"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/ProductProviders"
+  /resources/providers/{id}:
+    put:
+      tags:
+        - "resources"
+      summary: "Adds a resource provider"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            $ref: '#/definitions/ProductProviders'
+      responses:
+        405:
+          description: "Invalid input"
+  /resources/types:
+    post:
+      tags:
+        - "resources"
+      summary: "Adds a resource type"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            $ref: '#/definitions/ResourceType'
+      responses:
+        405:
+          description: "Invalid input"
+    get:
+      tags:
+        - "resources"
+      summary: "Gets all resource types"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/ResourceType"
+securityDefinitions:
+  petstore_auth:
+    type: "oauth2"
+    authorizationUrl: "http://petstore.swagger.io/oauth/dialog"
+    flow: "implicit"
+    scopes:
+      write:pets: "modify pets in your account"
+      read:pets: "read your pets"
+  api_key:
+    type: "apiKey"
+    name: "api_key"
+    in: "header"
+definitions:
+  Resource:
+    type: "object"
+    properties:
+      type:
+        type: "string"
+      name:
+        type: "string"
+      quantityReference:
+        type: "string"
+      pictureUrl:
+        type: "string"
+      providers:
+        type: "array"
+        items:
+          $ref: "#/definitions/ProviderSource"
+  ResourceType:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      plName:
+        type: "string"
+  Quantity:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+  ProviderSource:
+    type: "object"
+    properties:
+      referenceType:
+        type: "string"
+      url:
+        type: "string"
+  ProductProviders:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      color:
+        type: "string"
+  ApiResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      type:
+        type: "string"
+      message:
+        type: "string"
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"

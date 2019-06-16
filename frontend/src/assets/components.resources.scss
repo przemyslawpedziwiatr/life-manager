@@ -1,0 +1,23 @@
+.resource {
+  box-shadow: none !important;
+  border-radius: 5px;
+
+  border: 1px #dedede solid;
+  background: #fff;
+}
+
+.resource__picture {
+  display: block;
+
+  background-size: cover !important;
+
+  height: 60px;
+  width: auto;
+
+  margin: 0 auto;
+  margin-bottom: 0.5em;
+
+  border-radius: 4px;
+  border: 1px solid #b7b7b7;
+
+}

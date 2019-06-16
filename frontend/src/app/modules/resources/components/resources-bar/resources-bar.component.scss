@@ -1,0 +1,18 @@
+.bar__actions {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+
+  padding: 0.5em 1em;
+
+  background-color: #eee;
+
+  button {
+    margin: 0 0.5em;
+  }
+
+}
+
+.bar__select {
+  padding-right: 1em;
+}

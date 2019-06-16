@@ -1,0 +1,4 @@
+  <app-resource-view [id]="resource.id" *ngIf="!editModeState; else editable"></app-resource-view>
+ <ng-template #editable>
+   <app-resource-edit [id]="resource.id"></app-resource-edit>
+ </ng-template>

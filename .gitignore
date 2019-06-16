@@ -8,7 +8,9 @@
 /bazel-out
 
 # dependencies
-/node_modules
+frontend/node_modules
+backend/node_modules
+backend/functions/node_modules
 
 # profiling files
 chrome-profiler-events.json
@@ -50,3 +52,4 @@ Thumbs.db
 **\src\environments\firebase.ts
 /src/environments/firebase.ts
 /src/environments/
+

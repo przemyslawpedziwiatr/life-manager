@@ -1,0 +1,15 @@
+<section class="buy">
+  <button mat-raised-button class="buy__single"
+          [style.display]="isShowingProviders === false ? 'block' : 'none'"
+          (click)="open()">Buy</button>
+
+  <mat-button-toggle-group vertical="true"
+                           [style.display]="dropdownVisibility()" class="buy__group" name="fontStyle"
+                           aria-label="Font Style">
+    <mat-button-toggle value="bold">Bold</mat-button-toggle>
+    <mat-button-toggle value="italic">Italic</mat-button-toggle>
+    <mat-button-toggle value="underline">Underline</mat-button-toggle>
+    <mat-button-toggle (click)="close()">Close</mat-button-toggle>
+  </mat-button-toggle-group>
+
+</section>

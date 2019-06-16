@@ -1,0 +1,37 @@
+  <section class="bar__actions">
+
+    <ng-container *ngIf="isEdit(); else nonEdit">
+      <button mat-raised-button [disabled]="!history.hasPast" (click)="undo()">
+        <mat-icon aria-hidden="false" aria-label="undo">undo</mat-icon>
+      </button>
+      <button mat-raised-button [disabled]="!history.hasFuture" (click)="redo()">
+        <mat-icon aria-hidden="false" aria-label="redo">redo</mat-icon>
+      </button>
+      <button mat-raised-button (click)="save()">Save</button>
+      <button mat-raised-button (click)="cancel()">Cancel</button>
+      <button mat-raised-button (click)="addItem()">Add</button>
+    </ng-container>
+
+    <ng-template #nonEdit>
+      <mat-form-field class="bar__select">
+        <mat-label>Filtr</mat-label>
+        <mat-select>
+          <mat-option *ngFor="let type of resourceTypes" [value]="type.value">
+            {{type.viewValue}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="bar__select">
+        <mat-label>Sortuj po:</mat-label>
+        <mat-select>
+          <mat-option *ngFor="let sortType of sortTypes" [value]="sortType.value">
+            {{sortType.viewValue}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-raised-button  (click)="turnOnEdit()">Edit</button>
+    </ng-template>
+
+  </section>

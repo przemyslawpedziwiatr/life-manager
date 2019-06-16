@@ -1,0 +1,33 @@
+<img *ngIf="!selectedFile" alt="Product Picture" class="resource__picture" #img
+     [src]="pictureUrl" (error)="pictureUrl = '/assets/no-product.png'"/>
+
+<img *ngIf="selectedFile" class="resource__picture"
+     [src]="selectedFile.src"/>
+
+<mat-button-toggle-group>
+  <ng-container *ngIf="!selectedFile ">
+    <mat-button-toggle *ngIf="!isDefaultPicture()">
+      <mat-icon>backspace</mat-icon>
+    </mat-button-toggle>
+    <mat-button-toggle (click)="launchFileInput()">
+      <mat-icon>input</mat-icon>
+    </mat-button-toggle>
+  </ng-container>
+
+  <ng-container *ngIf="selectedFile">
+    <mat-button-toggle (click)="removePreUploadedFile()">
+      <mat-icon>undo</mat-icon>
+    </mat-button-toggle>
+    <mat-button-toggle (click)="launchFileInput()">
+      <mat-icon>send</mat-icon>
+    </mat-button-toggle>
+  </ng-container>
+
+</mat-button-toggle-group>
+
+<input #imageInput
+       [style.display]="'none'"
+       type="file"
+       accept="image/*"
+       (change)="processFile(imageInput)">
+

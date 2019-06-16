@@ -1,0 +1,7 @@
+<section>
+  <mat-button-toggle-group [disabled]="isSaving" name="fontStyle" aria-label="Font Style">
+    <mat-button-toggle value="decrease" (click)="!isSaving && decrease()">-</mat-button-toggle>
+    <mat-progress-bar value="{{ progressBarQuantity() }}" color="{{ progressColor() }}"></mat-progress-bar>
+    <mat-button-toggle  value="enlarge" (click)="!isSaving && enlarge()">+</mat-button-toggle>
+  </mat-button-toggle-group>
+</section>

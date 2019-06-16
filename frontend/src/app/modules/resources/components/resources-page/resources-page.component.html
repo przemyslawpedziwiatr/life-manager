@@ -1,0 +1,6 @@
+<app-resources-bar></app-resources-bar>
+<div class="resources">
+  <ng-container *ngFor="let item of items$ | async">
+    <app-resource [id]="item.id"></app-resource>
+  </ng-container>
+</div>

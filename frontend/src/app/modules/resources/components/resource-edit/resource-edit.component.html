@@ -1,0 +1,36 @@
+
+<mat-card class="resource">
+
+  <mat-card-header>
+    <mat-card-title>
+      <app-resource-picture-edit [id]="id"></app-resource-picture-edit>
+      <form class="example-form">
+        <mat-form-field class="example-full-width">
+          <input matInput type="text"
+                 [formControl]="editControls.name"/>
+        </mat-form-field>
+      </form>
+
+    </mat-card-title>
+
+    <mat-card-subtitle>
+        <form class="example-form">
+          <mat-form-field class="example-full-width">
+            <input type="text" placeholder="Type" aria-label="Type"
+                   matInput
+                   [formControl]="editControls.type"
+                   [matAutocomplete]="auto">
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+              <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                {{option.namePL}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </form>
+      </mat-card-subtitle>
+
+  </mat-card-header>
+  <mat-card-content class="resource__actions">
+    <button mat-raised-button class="full-width">Change Providers</button>
+  </mat-card-content>
+</mat-card>

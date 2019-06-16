@@ -1,0 +1,10 @@
+<mat-toolbar>
+  <button mat-raised-button (click)="toggle()">
+    <mat-icon aria-hidden="false" aria-label="Example home icon"
+              *ngIf="!isSidebarVisible">chevron_left</mat-icon>
+    <mat-icon aria-hidden="false" aria-label="Example home icon"
+              *ngIf="isSidebarVisible">chevron_right</mat-icon>
+  </button>
+  <span>Manager</span>
+  <button mat-raised-button (click)="logout()">Logout</button>
+</mat-toolbar>

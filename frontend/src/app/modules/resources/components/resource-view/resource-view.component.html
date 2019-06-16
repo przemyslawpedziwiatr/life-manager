@@ -1,0 +1,15 @@
+<mat-card class="resource">
+
+  <mat-card-header>
+    <mat-card-title>
+      <app-resource-picture [id]="id"></app-resource-picture>
+
+      <span>{{ resource.name }}</span>
+    </mat-card-title>
+    <mat-card-subtitle>{{ resource?.type?.namePL || "-" }}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content class="resource__actions">
+    <app-resource-quantity [id]="id"></app-resource-quantity>
+    <app-resource-buy></app-resource-buy>
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,10 @@
+
+<mat-sidenav-container class="example-container">
+  <mat-sidenav [fixedInViewport]="true" #sidenav mode="side" opened >
+    <app-dashboard-sidebar></app-dashboard-sidebar>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <app-dashboard-toolbar (toggleBar)="toggle($event)"></app-dashboard-toolbar>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
