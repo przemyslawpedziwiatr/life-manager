@@ -1,10 +1,11 @@
-import { Injectable } from '@angular/core';
-import { ResourcesStore } from './resources.store';
-import { HttpClient } from '@angular/common/http';
-import { createResource, Quantity, Resource, ResourceType } from './resource';
-import { BehaviorSubject, of, Subject, timer } from 'rxjs';
-import { ResourcesQuery } from './resources.query';
-import { EntityActions } from '@datorama/akita';
+import {Injectable} from '@angular/core';
+import {ResourcesStore} from './resources.store';
+import {HttpClient} from '@angular/common/http';
+import {createResource, ProductProvider, Quantity, Resource, ResourceType} from './resource';
+import {BehaviorSubject} from 'rxjs';
+import {ResourcesQuery} from './resources.query';
+import {EntityActions} from '@datorama/akita';
+import {AngularFireStorage} from "@angular/fire/storage";
 
 export interface ApiCallback {
   onSuccess?: Function;
@@ -15,12 +16,15 @@ export interface ApiCallback {
 @Injectable({ providedIn: 'root' })
 export class ResourcesService {
   public resourceTypes: BehaviorSubject<Array<ResourceType>> = new BehaviorSubject([]);
+  public productProviders: BehaviorSubject<Array<ProductProvider>> = new BehaviorSubject([]);
 
   constructor(private resourcesStore: ResourcesStore,
               private resourcesQuery: ResourcesQuery,
+              private firebaseService: AngularFireStorage,
               private http: HttpClient) {
     this.initData();
     this.fetchResourceTypes();
+    this.fetchProductProviders();
 
     this.resourcesQuery.selectEntityAction(EntityActions.Update).subscribe(ids => {
       console.log(this.resourcesQuery.getEntity(ids.pop()));
@@ -65,8 +69,18 @@ export class ResourcesService {
         () => this.resourceTypes.next([]));
   }
 
+  fetchProductProviders() {
+    this.http.get('resources/providers')
+      .subscribe((fetchedProviders: Array<ProductProvider>) => this.productProviders.next(fetchedProviders),
+        () => this.productProviders.next([]));
+  }
+
   resourceTypesObservable() {
     return this.resourceTypes.asObservable();
+  }
+
+  productProvidersObservable() {
+    return this.productProviders.asObservable();
   }
 
   getResourceById(resourceId) {
@@ -91,7 +105,7 @@ export class ResourcesService {
 
     this.http.put(
       `resources/${resourceId}`,
-      this.getResourceById(resourceId))
+        {quantity: this.getResourceById(resourceId).quantity})
       .subscribe(
         () => {
           callbacks.onSuccess && callbacks.onSuccess();
@@ -115,7 +129,7 @@ export class ResourcesService {
 
     this.http.put(
       `resources/${resourceId}`,
-      this.getResourceById(resourceId))
+        {quantity: this.getResourceById(resourceId).quantity})
       .subscribe(
         () => callbacks.onSuccess && callbacks.onSuccess(),
         () => {
@@ -128,7 +142,15 @@ export class ResourcesService {
 
   uploadImage(resourceId, imageFile) {
     const formData = new FormData();
-    formData.append('image', imageFile);
-    return this.http.put(`resources/${resourceId}/picture`, imageFile);
+    formData.append('file', imageFile);
+    return this.http.put(`resources/${resourceId}/picture`, formData);
+  }
+
+  removeImage(resourceId) {
+    return this.http.delete(`resources/${resourceId}/picture`);
+  }
+
+  receiveImage(resourceName) {
+    return this.firebaseService.ref(`resources/${resourceName}.jpg`).getDownloadURL();
   }
 }

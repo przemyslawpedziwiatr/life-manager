@@ -30,7 +30,7 @@ export const dashboardRoutes: Routes = [
     CommonModule,
     RouterModule,
     MaterialModule,
-    RouterModule.forChild(dashboardRoutes)
+    RouterModule.forRoot(dashboardRoutes)
   ],
   exports: [
     DashboardToolbarComponent,
@@ -40,3 +40,4 @@ export const dashboardRoutes: Routes = [
 })
 export class DashboardModule {
 }
+``

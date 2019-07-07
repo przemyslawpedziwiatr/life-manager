@@ -29,12 +29,14 @@ export const resourcesRoutes: Routes = [
   {
     path: 'resources',
     component: ResourcesPageComponent,
-    canActivate: [AuthGuard]
   },
   {
     path: 'resources/:id',
     component: ResourcePageComponent,
-    canActivate: [AuthGuard]
+  },
+  {
+    path: 'resources-types',
+    component: ResourceBuyProvidersComponent,
   }
 ];
 
@@ -57,12 +59,9 @@ export const resourcesRoutes: Routes = [
     CommonModule,
     BrowserModule,
     RouterModule,
-    // RouterModule.forChild(routes),
-    MatMenuModule,
     MaterialModule,
     ReactiveFormsModule,
     FormsModule,
-    MatSelectModule
   ]
 })
 export class ResourcesModule { }

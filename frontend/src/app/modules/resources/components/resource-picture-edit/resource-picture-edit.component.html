@@ -6,19 +6,19 @@
 
 <mat-button-toggle-group>
   <ng-container *ngIf="!selectedFile ">
-    <mat-button-toggle *ngIf="!isDefaultPicture()">
+    <mat-button-toggle [disabled]="isSaving" *ngIf="!isDefaultPicture()" (click)="removeImage()">
       <mat-icon>backspace</mat-icon>
     </mat-button-toggle>
-    <mat-button-toggle (click)="launchFileInput()">
+    <mat-button-toggle [disabled]="isSaving" (click)="launchFileInput()">
       <mat-icon>input</mat-icon>
     </mat-button-toggle>
   </ng-container>
 
   <ng-container *ngIf="selectedFile">
-    <mat-button-toggle (click)="removePreUploadedFile()">
+    <mat-button-toggle [disabled]="isSaving" (click)="removePreUploadedFile()">
       <mat-icon>undo</mat-icon>
     </mat-button-toggle>
-    <mat-button-toggle (click)="launchFileInput()">
+    <mat-button-toggle [disabled]="isSaving" (click)="uploadImage()">
       <mat-icon>send</mat-icon>
     </mat-button-toggle>
   </ng-container>

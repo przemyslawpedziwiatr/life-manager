@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Entities, EntityState, EntityStore, EntityUIStore, HashMap, StoreConfig } from '@datorama/akita';
 import { Resource, ResourceUI, ResourceUIState } from './resource';
-import {resources} from '../data.model';
 
 export interface ResourcesState extends EntityState<Resource> {
   filter?: string;

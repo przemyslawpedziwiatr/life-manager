@@ -20,11 +20,16 @@ export class ResourcePictureEditComponent implements OnInit {
   @ViewChild('imageInput') imageInput: ElementRef;
   selectedFile: ImageSnippet;
 
+  isSaving = false;
+
   constructor(private resourceQuery: ResourcesQuery,
               private resourcesService: ResourcesService) { }
 
   ngOnInit() {
-    this.pictureUrl = this.resourceQuery.getEntity(this.id).pictureUrl;
+    this.resourcesService.receiveImage(this.id).subscribe(
+        imageUrl => this.pictureUrl = imageUrl,
+        () => this.pictureUrl = '/assets/no-product.png'
+    );
   }
 
   isDefaultPicture() {
@@ -32,7 +37,9 @@ export class ResourcePictureEditComponent implements OnInit {
   }
 
   removePreUploadedFile() {
+    const fileInput: HTMLInputElement = this.imageInput.nativeElement;
     this.selectedFile = null;
+    fileInput.value = '';
   }
 
   launchFileInput() {
@@ -45,19 +52,44 @@ export class ResourcePictureEditComponent implements OnInit {
     const reader = new FileReader();
 
     reader.addEventListener('load', (event: any) => {
-
       this.selectedFile = new ImageSnippet(event.target.result, file);
-
-      this.resourcesService.uploadImage(this.id, this.selectedFile.file).subscribe(
-        (res) => {
-
-        },
-        (err) => {
-
-        })
     });
 
     file && reader.readAsDataURL(file);
+  }
+
+  removeImage() {
+    this.isSaving = true;
+
+    this.resourcesService.removeImage(this.id).subscribe(
+        (res) => {
+          this.pictureUrl = '/assets/no-product.png'
+        },
+        (err) => {
+
+        }, () => {
+          this.isSaving = false
+        })
+  }
+
+  uploadImage() {
+    this.isSaving = true;
+
+    this.resourcesService.uploadImage(this.id, this.selectedFile.file).subscribe(
+        (res) => {
+          this.resourcesService.receiveImage(this.id).subscribe(
+              imageUrl => {
+                this.pictureUrl = imageUrl;
+                this.removePreUploadedFile();
+              },
+              () => this.pictureUrl = '/assets/no-product.png'
+          );
+        },
+        (err) => {
+
+        }, () => {
+          this.isSaving = false
+        })
   }
 
 

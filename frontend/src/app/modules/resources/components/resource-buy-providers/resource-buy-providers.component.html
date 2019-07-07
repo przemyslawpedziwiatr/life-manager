@@ -1,3 +1,12 @@
-<p>
-  resource-buy-providers works!
-</p>
+<mat-card>
+    <mat-list>
+        <mat-list-item *ngFor="let provider of providers">
+            <mat-form-field>
+                <input matInput placeholder="Nazwa" value="{{provider.name}}">
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput placeholder="Kolor" type="color" value="{{provider.color}}">
+            </mat-form-field>
+        </mat-list-item>
+    </mat-list>
+</mat-card>

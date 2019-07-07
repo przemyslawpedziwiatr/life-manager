@@ -13,13 +13,7 @@ import { DashboardComponent } from './modules/dashboard/components/dashboard/das
 import { AkitaNgDevtools } from '@datorama/akita-ngdevtools';
 import { HTTP_INTERCEPTORS, HttpInterceptor } from '@angular/common/http';
 import { ApiInterceptor } from './core/interceptor/interceptor';
-
-const routes: Routes = [
-  {
-    path: 'dashboard',
-    component: DashboardComponent
-  }
-];
+import {AngularFireStorageModule} from "@angular/fire/storage";
 
 @NgModule({
   declarations: [
@@ -27,14 +21,14 @@ const routes: Routes = [
   ],
   imports: [
     AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFireStorageModule,
+    DashboardModule,
+    AppRoutingModule,
     !environment.production ? [] : AkitaNgDevtools.forRoot(),
     AngularFirestoreModule,
     BrowserAnimationsModule,
-    RouterModule.forRoot([]),
-    DashboardModule,
     ResourcesModule,
     AuthModule
-
   ],
   providers: [
     {

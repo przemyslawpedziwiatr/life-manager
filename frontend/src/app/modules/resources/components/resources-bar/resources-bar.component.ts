@@ -65,7 +65,6 @@ export class ResourcesBarComponent implements OnInit {
   addItem() {
     this.resourceStore.add({
       name: '',
-      pictureUrl: '',
       quantity: Quantity.LOW,
       id: guid(),
       type: {}

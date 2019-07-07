@@ -29,7 +29,8 @@ const modules = [
   MatToolbarModule,
   MatProgressBarModule,
   MatAutocompleteModule,
-  MatButtonToggleModule
+  MatButtonToggleModule,
+  MatSelectModule
 ];
 
 @NgModule({

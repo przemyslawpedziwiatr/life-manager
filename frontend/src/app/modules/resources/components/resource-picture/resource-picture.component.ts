@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Resource, ResourcesQuery } from '../../state';
+import {Resource, ResourcesQuery, ResourcesService} from '../../state';
 
 @Component({
   selector: 'app-resource-picture',
@@ -10,14 +10,19 @@ export class ResourcePictureComponent implements OnInit {
   @Input() id;
   pictureUrl: String;
 
-  constructor(private resourceQuery: ResourcesQuery) { }
+  constructor(private resourceQuery: ResourcesQuery,
+              public resourceService: ResourcesService) { }
 
   ngOnInit() {
-    this.pictureUrl = this.resourceQuery.getEntity(this.id).pictureUrl;
+    this.resourceService.receiveImage(this.id).subscribe(
+        imageUrl => this.pictureUrl = imageUrl,
+        () => this.pictureUrl = '/assets/no-product.png'
+    );
   }
 
   pictureStyle() {
-    return `${this.pictureUrl}`;
+    // return `${this.pictureUrl}`;
+    return;
   }
 
 }

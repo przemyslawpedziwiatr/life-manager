@@ -26,7 +26,6 @@ export interface ResourceDTO {
     name: string;
     type: string;
     quantity: Quantity;
-    pictureUrl: string;
     providers: Array<ProviderSource>;
 }
 
@@ -34,6 +33,5 @@ export interface Resource {
     name: string;
     type: ResourceType;
     quantity: Quantity;
-    pictureUrl: string;
     providers: Array<ProviderSource>;
 }

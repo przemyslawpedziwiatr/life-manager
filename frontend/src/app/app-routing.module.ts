@@ -1,12 +1,22 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AuthLoginComponent } from './modules/auth/components/auth-login/auth-login.component';
 import { DashboardComponent } from './modules/dashboard/components/dashboard/dashboard.component';
+import {AuthGuard} from "./core/guards/auth.guard";
+import { AuthLoginComponent } from './modules/auth/components/auth-login/auth-login.component';
 
 const routes: Routes = [
   {
-    path: 'dashboard',
-    component: DashboardComponent
+    path: 'login',
+    component: AuthLoginComponent
+  },
+  {
+    path: '**',
+    redirectTo: 'dashboard'
+  },
+    {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'dashboard'
   }
 ];
 

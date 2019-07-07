@@ -641,8 +641,6 @@ definitions:
         type: "string"
       quantityReference:
         type: "string"
-      pictureUrl:
-        type: "string"
       providers:
         type: "array"
         items:

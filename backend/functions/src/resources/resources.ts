@@ -1,18 +1,20 @@
 import {Quantity, Resource, ResourceDTO, ResourceType} from "../model/resources.model";
 import express = require('express');
-import {db} from "../index";
+import {db} from "../tools";
 import * as admin from "firebase-admin";
 import {forkJoin} from "rxjs";
 import {ResourceTypeWithID} from "./resources-types";
 import {isObject} from 'lodash';
-import { filesUpload } from '../utilities/file-upload';
-import Request = Express.Request;
+import {filesUpload, UploadedFile} from '../utilities/file-upload';
+import {Express} from "../custom";
+import RequestWithFiles = Express.RequestWithFiles;
+const os = require('os');
+const fs = require('fs');
+const storage = admin.storage();
 
 interface ResourceWithId extends Resource {
     id: string;
 }
-
-
 
 module.exports = function (app: express.Application) {
     app.get('/resources', async (req: express.Request, res: express.Response) => {
@@ -41,14 +43,13 @@ module.exports = function (app: express.Application) {
 
         const mergeDocuments = (querySnapshot: admin.firestore.QuerySnapshot) => {
             return querySnapshot.docs.map((doc) => {
-                const {name, providers, quantity, pictureUrl, type}: ResourceDTO = <ResourceDTO>doc.data();
+                const {name, providers, quantity, type}: ResourceDTO = <ResourceDTO>doc.data();
 
                 return {
                     id: doc.id,
                     name,
                     providers,
                     quantity,
-                    pictureUrl,
                     type: resourceTypeFromFetchedTypes(type)
                 };
             });
@@ -64,18 +65,29 @@ module.exports = function (app: express.Application) {
 
     app.put('/resources/:id', async (req: express.Request, res: express.Response) => {
         const resourceId = req.params.id;
-        const body = req.body;
+        const updatedParameters = req.body;
         const extractTypeReference = (type: ResourceTypeWithID | string) => isObject(type) ? type.id : type;
+        const updatedResource: Partial<ResourceDTO> = {};
 
-        const resource: ResourceDTO = {
-            name: body.name,
-            providers: body.providers,
-            pictureUrl: body.pictureUrl,
-            quantity: body.quantity,
-            type: extractTypeReference(body.type)
-        };
+        console.log({updatedParameters});
 
-        await db.collection('resources').doc(`${resourceId}`).set(resource).then(doc => {
+        Object.keys(updatedParameters).forEach(paramKey => {
+            Object.defineProperty(updatedResource, paramKey, {
+                writable:true,
+                enumerable: true,
+                value: updatedParameters[paramKey]});
+        });
+
+        console.log({updatedResource});
+
+        if(updatedResource.type) {
+            updatedResource.type = updatedResource.type ?
+                extractTypeReference(updatedResource.type) : updatedResource.type;
+        }
+
+        console.log({updatedResource});
+
+        await db.collection('resources').doc(`${resourceId}`).update(updatedResource).then(doc => {
             return res.status(200).send({status: 'Resource updated!'});
         });
     });
@@ -85,7 +97,6 @@ module.exports = function (app: express.Application) {
         const resource: ResourceDTO = {
             name: body.name,
             providers: body.providers,
-            pictureUrl: body.pictureUrl,
             quantity: Quantity.LOW,
             type: ''
         } as ResourceDTO;
@@ -105,17 +116,44 @@ module.exports = function (app: express.Application) {
         })
     });
 
-    app.put('/resources/:id/image', filesUpload, async (req: Request, res: express.Response) => {
-        const resourceId = req.params.id;
-        const {files} = req;
+    app.put('/resources/:id/picture', filesUpload, async (req: RequestWithFiles, res: express.Response) => {
+        if(req.files && req.files.length > 0) {
+            const resourceId = req.params.id;
+            const file: UploadedFile = <UploadedFile>req.files[0];
+            const filepath = `${os.tmpdir()}/${file.originalname}`;
 
-        const storage = admin.storage();
-        storag.bucket().upload('file',{
-            contentType: 'image/jpeg',
-            destination: 'file.png'
-        })
-        // upload file to stoarge
-        // get file url
-        // add url to collection
+            const uploadFileToFirebaseStorage = () => storage.bucket().upload(filepath,{
+                destination: `resources/${resourceId}.jpg`
+            });
+
+            const removeLocalFile = () => fs.unlinkSync(filepath);
+
+            try {
+                await uploadFileToFirebaseStorage();
+                await removeLocalFile();
+                return res.status(200).send({
+                    status: 'File uploaded and saved to FireStore!'
+                });
+            } catch(error) {
+                return res.status(400).send({
+                    status: 'Could not upload file!'
+                });
+            }
+        }
+        return res.status(404);
     });
-}
+
+    app.delete('/resources/:id/picture', async(req, res) => {
+       const resourceId = req.params.id;
+
+       const removeFileFromFirebaseStorage = () => storage.bucket()
+           .file(`/resources/${resourceId}.jpg`)
+           .delete();
+
+       await removeFileFromFirebaseStorage().then(() => {
+           return res.status(200).send({
+               status: 'File removed from FireStore!'
+           });
+       })
+    });
+};
