@@ -1,7 +1,18 @@
+import {ImageTools} from "./image-tools";
+
 const Busboy = require('busboy');
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
+
+export interface UploadedFile {
+    fieldname: string;
+    originalname: string;
+    encoding: string;
+    mimetype: string;
+    buffer: Array<any>;
+    size: number;
+}
 
 // @ts-ignore
 export const filesUpload = function(req, res, next) {
@@ -16,7 +27,7 @@ export const filesUpload = function(req, res, next) {
 
     const fields = {};
     // @ts-ignore
-    const files = [];
+    const files: Array<UploadedFile> = [];
     // @ts-ignore
     const fileWrites = [];
     // Note: os.tmpdir() points to an in-memory file system on GCF
@@ -32,21 +43,26 @@ export const filesUpload = function(req, res, next) {
     });
 
     // @ts-ignore
-    busboy.on('file', (fieldname, file, filename, encoding, mimetype) => {
-        const filepath = path.join(tmpdir, filename);
-        console.log(`Handling file upload field ${fieldname}: ${filename} (${filepath})`);
-        const writeStream = fs.createWriteStream(filepath);
+    busboy.on('file',  (fieldname, file, filename, encoding, mimetype) => {
+        const filePath = path.join(tmpdir, filename);
+        console.log(`Handling file upload field ${fieldname}: ${filename} (${filePath})`);
+        const writeStream = fs.createWriteStream(filePath);
+
         file.pipe(writeStream);
 
         fileWrites.push(new Promise((resolve, reject) => {
             file.on('end', () => writeStream.end());
-            writeStream.on('finish', () => {
+            writeStream.on('finish', async () => {
+                await ImageTools.resizeAndSaveExisting(filename, filePath);
+
                 // @ts-ignore
-                fs.readFile(filepath, (err, buffer) => {
+                fs.readFile(filePath, async (err, buffer) => {
                     const size = Buffer.byteLength(buffer);
                     console.log(`${filename} is ${size} bytes`);
+
                     if (err) {
-                        return reject(err);
+                        reject(err);
+                        return;
                     }
 
                     files.push({
@@ -57,12 +73,6 @@ export const filesUpload = function(req, res, next) {
                         buffer,
                         size,
                     });
-
-                    try {
-                        fs.unlinkSync(filepath);
-                    } catch (error) {
-                        return reject(error);
-                    }
 
                     resolve();
                 });
