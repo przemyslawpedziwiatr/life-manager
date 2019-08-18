@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Quantity, Resource, ResourcesQuery, ResourcesService, ResourcesStore } from '../../state';
 import { EntityStateHistoryPlugin, guid, StateHistoryPlugin } from '@datorama/akita';
+import { map, tap } from 'rxjs/operators';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-resources-bar',
@@ -15,10 +17,10 @@ export class ResourcesBarComponent implements OnInit {
     {value: 'tacos-2', viewValue: 'Tacos'}
   ];
   sortTypes = [
-    {value: 'steak-0', viewValue: 'Steak'},
-    {value: 'pizza-1', viewValue: 'Pizza'},
-    {value: 'tacos-2', viewValue: 'Tacos'}
+    {value: 'quantity', viewValue: 'Ilość'},
+    {value: 'name', viewValue: 'Nazwa'},
   ];
+  sortControl = new FormControl('');
 
   constructor(private resourceService: ResourcesService,
               private resourceStore: ResourcesStore,
@@ -26,7 +28,9 @@ export class ResourcesBarComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    this.sortControl.valueChanges.pipe(
+      tap(x => console.log(x))
+    ).subscribe();
   }
 
 
@@ -39,7 +43,7 @@ export class ResourcesBarComponent implements OnInit {
   }
 
   isEdit() {
-    return this.resourceService.isEdit();
+    return this.resourceService && this.resourceService.isEdit();
   }
 
   turnOnEdit() {
@@ -61,6 +65,7 @@ export class ResourcesBarComponent implements OnInit {
     this.history.jumpToPast(0);
     this.turnOffEdit();
   }
+
 
   addItem() {
     this.resourceStore.add({

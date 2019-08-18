@@ -17,6 +17,8 @@ export interface ApiCallback {
 export class ResourcesService {
   public resourceTypes: BehaviorSubject<Array<ResourceType>> = new BehaviorSubject([]);
   public productProviders: BehaviorSubject<Array<ProductProvider>> = new BehaviorSubject([]);
+  private _resources: BehaviorSubject<Array<Resource>> = new BehaviorSubject([]);
+  readonly resources$ = this._resources.asObservable();
 
   constructor(private resourcesStore: ResourcesStore,
               private resourcesQuery: ResourcesQuery,
@@ -29,10 +31,20 @@ export class ResourcesService {
     this.resourcesQuery.selectEntityAction(EntityActions.Update).subscribe(ids => {
       console.log(this.resourcesQuery.getEntity(ids.pop()));
     });
+
+    this.resources = [... this.resourcesQuery.getAll()];
   }
 
   private initData(): void {
     this.getResources();
+  }
+
+  public get resources() {
+    return this._resources.getValue();
+  }
+
+  public set resources(val: Resource[]) {
+      this._resources.next(val);
   }
 
   remove(id: string) {
@@ -60,6 +72,7 @@ export class ResourcesService {
       .subscribe((serverResources: Array<Resource>) => {
         const convertedResources = serverResources.map(r => createResource(r));
         this.resourcesStore.set(convertedResources);
+        this.resources = [... convertedResources];
       });
   }
 
@@ -70,7 +83,7 @@ export class ResourcesService {
   }
 
   fetchProductProviders() {
-    this.http.get('resources/providers')
+    this.http.get('dictionaries/providers')
       .subscribe((fetchedProviders: Array<ProductProvider>) => this.productProviders.next(fetchedProviders),
         () => this.productProviders.next([]));
   }

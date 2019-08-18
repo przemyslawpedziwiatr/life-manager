@@ -24,8 +24,8 @@
 
       <mat-form-field class="bar__select">
         <mat-label>Sortuj po:</mat-label>
-        <mat-select>
-          <mat-option *ngFor="let sortType of sortTypes" [value]="sortType.value">
+        <mat-select [formControl]="sortControl" name="sortType">
+          <mat-option *ngFor="let sortType of sortTypes"  [value]="sortType.value" >
             {{sortType.viewValue}}
           </mat-option>
         </mat-select>

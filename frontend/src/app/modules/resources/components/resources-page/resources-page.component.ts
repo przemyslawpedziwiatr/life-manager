@@ -19,7 +19,7 @@ export class ResourcesPageComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.items$ = this.resourceQuery.selectAll();
+    this.items$ = this.resourcesService.resources$;
   }
 
 
