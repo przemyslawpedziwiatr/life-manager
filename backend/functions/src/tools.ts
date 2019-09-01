@@ -13,3 +13,5 @@ app.use(cors({origin: true}));
 require('./resources/resources')(app);
 require('./resources/resources-types')(app);
 require('./resources/resources-providers')(app);
+
+require('./discounts/discounts')(app);
