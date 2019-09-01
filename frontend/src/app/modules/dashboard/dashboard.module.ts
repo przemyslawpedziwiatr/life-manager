@@ -8,13 +8,15 @@ import { RouterModule } from '@angular/router';
 import { resourcesRoutes } from '../resources/resources.module';
 import { Routes } from '@angular/router/src/config';
 import { AuthGuard } from '../../core/guards/auth.guard';
+import { discountsRoutes } from '../discounts/discounts.module';
 
 export const dashboardRoutes: Routes = [
   {
     path: 'dashboard',
     component: DashboardComponent,
     children: [
-      ... resourcesRoutes
+      ... resourcesRoutes,
+      ... discountsRoutes
     ],
     canActivate: [AuthGuard]
   }
