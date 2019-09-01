@@ -14,6 +14,7 @@ import { AkitaNgDevtools } from '@datorama/akita-ngdevtools';
 import { HTTP_INTERCEPTORS, HttpInterceptor } from '@angular/common/http';
 import { ApiInterceptor } from './core/interceptor/interceptor';
 import {AngularFireStorageModule} from "@angular/fire/storage";
+import { DiscountsModule } from './modules/discounts/discounts.module';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import {AngularFireStorageModule} from "@angular/fire/storage";
     AngularFirestoreModule,
     BrowserAnimationsModule,
     ResourcesModule,
-    AuthModule
+    AuthModule,
+    DiscountsModule
   ],
   providers: [
     {
